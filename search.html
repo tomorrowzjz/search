@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index3/index3.css">
+
+</head>
+<body>
+<div class="header3">
+    <div class="search">
+        <div class="search-tab">
+            <a class="item j-type" data-type="item" href="javascript:;"></a>
+            <i class="line"></i>
+            <a class="item j-type selected" data-type="shop" href="javascript:;"></a>
+            <i class="line"></i>
+            <a class="item" href="https://tusou.vvic.com/" target="_blank"></a>
+        </div>
+        <form action="" method="get" accept-charset="utf-8" class="search-form">
+            <div class="search-content" style="border-color: rgb(229, 229, 229);">
+                <div class="tab-wraper">
+                </div>
+                <input id="q" type="text" autocomplete="off" class="search-query" value="" name="q" disableautocomplete="disableautocomplete" placeholder="商品名称">
+            </div>
+            <span class="soutu-btn" vda="action|tusou|switch">
+                        <i class="vvicon"></i>
+                    </span>
+            <button type="submit" id="btnSearch" class="search-btn">
+                搜索
+            </button>
+        </form>
+        <div class="tusou-wrap" style="display: none;">
+            <div class="tusou-main">
+                <div class="tusou-form clearfix">
+                    <form name="tusouForm" id="tusouForm" method="get" accept-charset="utf-8">
+                        <div class="fl">
+                            <i class="camera"></i>
+                            <input name="url" placeholder="粘贴图片 / 粘贴图片网址" id="url">
+                        </div>
+                        <div class="fr">
+                            <button type="submit" id="submit">
+                                <i class="vvicon"></i>
+                            </button>
+                        </div>
+                        <div class="err-msg">
+                            <i class="vvicon"></i>
+                            请输入正确的图片网址
+                        </div>
+                    </form>
+                </div>
+                <div class="tusou-up">
+                    <div class="tusou-static">
+                        <div id="drop-area" class="tusou-area" vda="action|tusou|dragover" style="position: relative;">拖拽图片到这里</div>
+                        <div id="up-content" class="up-img">
+                            <a href="javascript:;" id="selectfiles" class="btn btn-x-big btn-default btn-up-local" vda="action|tusou|upload_btn" style="position: relative; z-index: 1;"><i class="vvicon"></i>本地上传图片</a>
+                            <input type="file" id="upload">
+                            <div id="html5_1cno87gl0nuutgb1d0bd56jik3_container" class="moxie-shim moxie-shim-html5" style="position: absolute; top: 0px; left: 0px; width: 0px; height: 0px; overflow: hidden; z-index: 0;"><input id="html5_1cno87gl0nuutgb1d0bd56jik3" type="file" style="font-size: 999px; opacity: 0; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;" accept="image/jpeg,image/png"></div></div>
+                    </div>
+                    <div class="tusou-loading" style="display: none">
+                        <img src="./loading.gif" width="16" alt="">
+                        <p>正在上传图片，请稍后</p>
+                    </div>
+                    <div class="tusou-error" style="display: none">
+                        <p class="h4"></p>
+                        <p class="desc"></p>
+                        <a href="javascript:;" class="btn btn-x-big btn-default btn-up-retry" vda="action|tusou|reupload_btn">重新上传图片</a>
+                    </div>
+                    <div class="tusou-code" style="display: none">
+                        <div class="code-msg">
+                            <span class="code-warning">您操作的频率过快，请输入验证码验证身份</span>
+                            <span class="code-error">验证码输入错误，请重新输入</span>
+                        </div>
+                        <div class="code-form clearfix">
+                            <input maxlength="4" id="warningCode" placeholder="请输入验证码">
+                            <img src="blank.gif" id="codeImage" width="110" height="40">
+                            <div class="code-change">
+                                看不清
+                                <span class="code-change-btn">换一张</span>
+                            </div>
+                        </div>
+                        <div class="btn btn-primary code-btn">继续搜图</div>
+                    </div>
+                </div>
+                <a vda="action|tusou|paste" id="pasteEvent"></a>
+                <a vda="action|tusou|url_fail" id="urlSearchFailed"></a>
+                <a vda="action|tusou|tusou_btn" id="urlSearchSuccess"></a>
+                <div id="ossfile" style="display: none;"></div>
+                <pre id="console" style="display: none;"></pre>
+            </div>
+        </div>
+        <div class="more-words" style="display:none" id="gov_search_suggest">
+            <div class="suggest-shop"></div>
+            <div class="search-img ">
+            </div>
+            <ul> </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    let body = document.querySelector('body');
+    let icon = document.querySelector('.soutu-btn .vvicon');
+    let tusou_wrap = document.querySelector('.tusou-wrap');
+    let tusou_up = document.querySelector('.tusou-up');
+    let fl = document.querySelector('.fl');
+    let q = document.querySelector('#q');
+    let tusou_loading = document.querySelector('.tusou-loading');
+    let tusou_static = document.querySelector('.tusou-static');
+    let upload = document.querySelector('#upload');
+    let selectfiles = document.querySelector('#selectfiles');
+    let url = document.querySelector('#url');
+    let more = document.querySelector('.more-words');
+    let search_content = document.querySelector('.search-content');
+    icon.onclick = function () {
+        tusou_wrap.style.display = 'block';
+//        more.style.display = 'block';
+        tusou_up.style.display = 'block';
+        url.focus();
+    }
+    q.onfocus = function () {
+        search_content.style.borderColor = "rgb(251, 101, 138)";
+    }
+    q.onblur= function () {
+        search_content.style.borderColor = "rgb(229, 229, 229)";
+    }
+    url.onfocus = function () {
+
+        fl.style.borderColor = "rgb(251, 101, 138)";
+    }
+    url.onblur = function () {
+//        tusou_wrap.style.display = 'none';
+//        more.style.display = 'block';
+//        tusou_up.style.display = 'none';
+//        fl.style.borderColor = "";
+    }
+    selectfiles.onclick = function (e) {
+        e.preventDefault();
+        upload.click();
+    }
+    var box = document.getElementById('drop-area');
+    console.log(box);
+    box.ondragover = function (e) {
+        e.preventDefault();
+    }
+    box.ondrop = function (e) {
+        e.preventDefault();
+        var f = e.dataTransfer.files[0];//获取到第一个上传的文件对象
+        var fr = new FileReader();//实例FileReader对象
+        fr.readAsDataURL(f);//把上传的文件对象转换成url
+        fr.onload = function (e) {
+            console.log(e);
+            // var Url=e.target.result;//上传文件的URL
+            var Url = this.result;//上传文件的URL
+            box.innerHTML += '<img src="' + Url + '" alt="" width="50" height="50">';
+        }
+    }
+    q.addEventListener('paste',function (e) {
+        console.log(e);
+    })
+    url.addEventListener('paste',function (e) {
+        if ( !(e.clipboardData && e.clipboardData.items) ) {
+            return ;
+        }
+
+        for (var i = 0, len = e.clipboardData.items.length; i < len; i++) {
+            var item = e.clipboardData.items[i];
+
+            if (item.kind === "string") {
+            } else if (item.kind === "file") {
+                tusou_loading.style.display="block";
+                tusou_static.style.display="none";
+            }
+        }
+//        tusou_loading.style.display="block";
+//        tusou_static.style.display="none";
+        console.log(e.clipboardData.items[0].getAsFile());
+        let f = e.clipboardData.items[0].getAsFile();
+        var fr = new FileReader();//实例FileReader对象
+        fr.readAsDataURL(f);//把上传的文件对象转换成url
+        fr.onload = function (e) {
+            console.log(e);
+            // var Url=e.target.result;//上传文件的URL
+            var Url = this.result;//上传文件的URL
+            console.log(Url);
+            body.innerHTML += '<img src="' + Url + '" alt="" width="50" height="50">';
+        }
+    })
+</script>
+</body>
+</html>
